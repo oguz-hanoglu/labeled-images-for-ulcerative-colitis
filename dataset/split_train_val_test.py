@@ -1,3 +1,15 @@
+"""
+OH: Gördüğüm kadarıyla çok zor bir iş yapıyoruz.
+Amaç, bir hastaya ait Mayo0-4 sonuçlarının hepsi aynı yerde (train, test, or val) içinde olsun.
+Bunun için hastaları üzerinden klasik, numpy ile, François usülü, slice ile, bir split söz konusu.
+
+Sonra beklentimiz bunların içindeki Mayo0'ların, sonra 1,2,3'leirn hep istediğimiz oranda dağılmış olması.
+Bu yüzden kod çok çalışıyor. Ama bir şekilde en sonda yapıyor.
+
+Matematik ile daha iyi ve hızlı da çözüm olsa da bu da geçerli sanki.
+https://pypi.org/project/split-folders/ kütüphanesi de bir çözüm olabilir
+"""
+
 import glob
 import os
 from distutils.dir_util import copy_tree
@@ -38,6 +50,9 @@ folder_class_names = sorted(os.listdir(os.path.join(published_folder_path, all_f
 
 pass_state = False
 
+#""" 
+#OH: Bu for'u zamanıdna silmişim. Şimdi silmeyim. Ama neden bilemedim şimdi(20230213). O nedenle yoruma aldım.
+#Galiba klasör içi temizlik yapıyor, belki de birkez çalışması yeterli dedim...
 # Remove all folders inside patient Mayo folders, there should be only images
 for folder in all_folders:
     for folder_class_name in folder_class_names:
@@ -46,6 +61,7 @@ for folder in all_folders:
             if item.is_dir():
                 print("removing redundant folder:", item.path)
                 shutil.rmtree(item.path)
+#"""
 
 while not pass_state:
     pass_state = True
@@ -63,6 +79,7 @@ while not pass_state:
     val_set_folder_size = ceil(val_set_ratio * len(all_folders))
     test_set_folder_size = ceil(test_set_ratio * len(all_folders))
 
+    # OH: patientları dağıtıyoruz. 100 taneyseler, 70'i train'e... 15'i...
     val_folders = all_folders[0:val_set_folder_size]
     test_folders = all_folders[val_set_folder_size:(val_set_folder_size + test_set_folder_size)]
     train_folders = all_folders[(val_set_folder_size + test_set_folder_size):]
@@ -101,6 +118,8 @@ while not pass_state:
             copy_tree(class_folder.path, target_directory)
 
     print("\nChecking splitting ratios:")
+    #Sonra kontrol ediyoruz, %15 patient gönderdik ama her birinin içindeki dosya adedi farklı. %15 dosya mı?
+
     for class_name in folder_class_names:
         print(class_name)
         train_size = len(glob.glob(os.path.join(target_train_path, class_name, "*.bmp")))

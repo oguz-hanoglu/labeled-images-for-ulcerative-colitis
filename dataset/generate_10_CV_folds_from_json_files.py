@@ -1,6 +1,13 @@
 # Created by Gorkem Polat at 13.12.2021
 # contact: polatgorkem@gmail.com
 
+"""
+OH:
+Straightforward şekilde, json dosyalarında ifadesini bulan klasörleri oluşturuyor.
+json'dan dict'i alıp, orada denilen klasöre denilen dosyaları copy paste.
+"""
+
+
 import argparse
 import os
 import shutil
@@ -47,6 +54,8 @@ for json_folder in json_folders:
     current_folder_train_folder = os.path.join(current_folder, "train")
     os.mkdir(current_folder_train_folder)
     for key_value_pair in train_images.items():
+        #key: "Mayo 0": value: ["UC_patient_155_28.bmp", "UC_patient_78_34.bmp"
+        
         current_folder_class = os.path.join(current_folder_train_folder, key_value_pair[0])
         os.mkdir(current_folder_class)
 

@@ -29,12 +29,12 @@ class UCMayo4(Dataset):
 
         for folder in subFolders:
             className = folder.split("/")[-1]
-            image_paths = glob.glob(os.path.join(folder, "*"))
+            image_paths = glob.glob(os.path.join(folder, "*")) # * ile herhangi bir dosya dediğimizi glob ile işleyip, klasördeki tüm dosyaları alıyoruz.
 
             for image_path in image_paths:
                 image = Image.open(image_path)
-                image.load()
-                self.samples.append((image, self.class_names.index(className)))
+                image.load() #pillow'unn open'ı lazy çalışıyormuş, esas load dediğin noktada open yapıyormuş.
+                self.samples.append((image, self.class_names.index(className))) #(resim, 3) gibi bir tuple ekledik.
 
     def __len__(self):
         return len(self.samples)
